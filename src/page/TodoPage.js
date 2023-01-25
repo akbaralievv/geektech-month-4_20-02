@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react"
 import ModalAdd from "../components/ModalAdd"
-import TodoCard from "../components/TodoCard"
 import TodoList from "../components/TodoList"
 import Button from "../components/ui/Button"
 import Input from "../components/ui/Input"
 
 import classes from './todo.module.css'
-
-const data = [
-  {title: 'Важно', description: 'Сходить в магазин', date: 'Сегодня'}
-]
 
 const TodoPage = () => {
 
@@ -20,6 +15,7 @@ const TodoPage = () => {
     description: '',
   })
   const [isShow, setIsShow] = useState(false)
+
   const [ count, setCount ] = useState(0)
 
   const handleOnChange = (e) => {
@@ -53,6 +49,7 @@ const TodoPage = () => {
     setTodoList(newList)
     handleShow()
   }
+
   const completedOnChange = (date) => {
     const newList = todoList.map((todo) => {
       if (todo.date === date) {
@@ -63,7 +60,6 @@ const TodoPage = () => {
     })
     setTodoList(newList)
   }
-
 
   const editTodo = (todo) => {
     setIsShow(true)
@@ -92,6 +88,7 @@ const TodoPage = () => {
   useEffect(() => {
     localStorage.setItem('data', JSON.stringify(todoList))
   }, [ todoList ])
+
   return (
     <>
       <Button handleDo={handleShow}>Добавить таск</Button>
