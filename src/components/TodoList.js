@@ -7,7 +7,7 @@ const TodoList = ({ todoList, editTodo, deleteTodo }) => {
   return (
     <div className={classes.flexList}>
       {todoList.map((todo) => 
-        <TodoCard todo={todo} editTodo={editTodo} deleteTodo={deleteTodo}/>
+        <TodoCard key={todo.date} todo={todo} editTodo={editTodo} deleteTodo={deleteTodo}/>
       )}
     </div>
   )

@@ -2,7 +2,8 @@ import classes from './components.module.css'
 
 const ModalAdd = ({ closeWindow, children }) => {
 
-  return (
+
+return (
     <>
       <div className={classes.modalWrapper} onClick={closeWindow}>
       </div>
