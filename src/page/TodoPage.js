@@ -98,7 +98,7 @@ const TodoPage = () => {
   }
 
   const searchArray = () => todoList.filter(item => item.title.toLowerCase().includes(search.toLowerCase()))
-
+  // console.log(searchArray().length);
   return (
     <>
       <Button handleDo={handleShow}>Добавить таск</Button>

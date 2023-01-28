@@ -2,7 +2,6 @@
 import classes from './ui.module.css'
 
 const Input = ({ name, propsClass, value, handleOnChange }) => {
-
   return (
     <input 
       name={name}
