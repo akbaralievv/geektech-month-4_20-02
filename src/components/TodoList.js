@@ -7,7 +7,7 @@ const TodoList = ({ todoList, editTodo, deleteTodo, completedOnChange, value }) 
   return (
     <div className={classes.flexList}>
       {
-       (todoList.length === 0) ? <TodoNot value={value}/> :
+       (todoList.length === 0 && value.length>0) ? <TodoNot value={value}/> :
         todoList.map((todo, i) => 
         <TodoCard key={todo.date} todo={todo} editTodo={editTodo} deleteTodo={deleteTodo} completedOnChange={completedOnChange}/>
       )}
