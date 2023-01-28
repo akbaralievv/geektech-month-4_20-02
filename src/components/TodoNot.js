@@ -1,11 +1,11 @@
 
 import classes from './components.module.css'
 
-const TodoNot = () => {
+const TodoNot = ({value}) => {
 
   return (
     <div >
-        <h3>not found</h3>
+        <h3>not found {value}</h3>
     </div>
   )
 }

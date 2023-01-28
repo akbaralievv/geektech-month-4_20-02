@@ -98,7 +98,6 @@ const TodoPage = () => {
   }
 
   const searchArray = () => todoList.filter(item => item.title.toLowerCase().includes(search.toLowerCase()))
-  // console.log(searchArray().length);
   return (
     <>
       <Button handleDo={handleShow}>Добавить таск</Button>
@@ -117,7 +116,7 @@ const TodoPage = () => {
         </ModalAdd>
       )}
       <Input propsClass={'inputSearch'} value={search} handleOnChange={(e) => setSearch(e.target.value)}/>
-      <TodoList todoList={searchArray().slice(offset, offset + 2)} editTodo={editTodo} deleteTodo={deleteTodo} completedOnChange={completedOnChange}/>
+      <TodoList todoList={searchArray().slice(offset, offset + 2)} editTodo={editTodo} deleteTodo={deleteTodo} completedOnChange={completedOnChange} value={search}/>
       <Pagination limit={2} offset={offset} length={todoList.length} setOffset={setOffset}/>
     </>
   )
