@@ -1,4 +1,3 @@
-
 import classes from './ui.module.css'
 
 const Input = ({ name, propsClass, value, handleOnChange }) => {
@@ -9,7 +8,7 @@ const Input = ({ name, propsClass, value, handleOnChange }) => {
       value={value} 
       onChange={handleOnChange} 
       placeholder="Search..."
-      
+      type={'checkbox'}
       className={classes[ propsClass ]}
     />
   )

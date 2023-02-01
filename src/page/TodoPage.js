@@ -1,25 +1,32 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { Context } from "../App"
+import AddEditTask from "../components/AddEditTask"
+import { ClassComponent } from "../components/ClassComponent"
 import ModalAdd from "../components/ModalAdd"
 import Pagination from "../components/Pagination"
 import TodoList from "../components/TodoList"
 import Button from "../components/ui/Button"
 import Input from "../components/ui/Input"
-
+import { useCheck } from "../components/hooks"
 import classes from './todo.module.css'
 
 const TodoPage = () => {
 
+  // HOOKS
+  const { setAuth } = useContext(Context)
   const [todoList, setTodoList] = useState([])
-  const [inputValue, setInputValue] = useState('')
   const [dataForm, setDataForm] = useState({
     title: '',
     description: '',
   })
+
   const [isShow, setIsShow] = useState(false)
   const [ offset, setOffset ] = useState(0)
-  const [ count, setCount ] = useState(0)
   const { search, setSearch } = useContext(Context)
+  const [ type, setType ] = useState('asc') // asc || desc || letter
+
+
+  // HANDLERS
 
   const handleOnChange = (e) => {
     setDataForm(prev => {
@@ -34,9 +41,14 @@ const TodoPage = () => {
     })
   }
 
+  const handleFilter = () => {
+    const newState = todoList.filter((item) => item.completed === false)
+    setTodoList(newState)
+  }
+
   const submitData = () => {
     setTodoList(prev => {
-      return [...prev, {...dataForm, date: Date(), completed: false}]
+      return [...prev, {...dataForm, date: Date.now(), completed: false}]
     })
     handleShow()
   }
@@ -83,7 +95,7 @@ const TodoPage = () => {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('data'))
-    if (data.length !== 0) {
+    if (data?.length !== 0) {
       setTodoList(data)
     }
   }, [])
@@ -92,33 +104,31 @@ const TodoPage = () => {
     localStorage.setItem('data', JSON.stringify(todoList))
   }, [ todoList ])
 
-  const handleFilter = () => {
-    const newState = todoList.filter((item) => item.completed === false)
-    setTodoList(newState)
+  const logOut = () => {
+    localStorage.removeItem('access_token')
+    setAuth(false)
   }
 
-  const searchArray = () => todoList.filter(item => item.title.toLowerCase().includes(search.toLowerCase()))
   return (
-    <>
+    <div>
+      <ClassComponent/>
+
       <Button handleDo={handleShow}>Добавить таск</Button>
       <Button handleDo={handleFilter}>Очистить выполненные</Button>
-      {isShow && (
-        <ModalAdd closeWindow={handleShow}>
-          <Input name='title' propsClass={'modalInput'} value={dataForm.title} handleOnChange={handleOnChange}/>
-          <Input name='description' propsClass={'modalInput'} value={dataForm.description} handleOnChange={handleOnChange}/>
-          {
-            dataForm.date 
-              ?
-                <Button isModal={true} handleDo={submitEditData}>Редактировать</Button>
-              :
-                <Button isModal={true} handleDo={submitData}>Добавить таск</Button>
-          }
-        </ModalAdd>
-      )}
+      <Button handleDo={logOut}>Выйти</Button>
+
+      <Button handleDo={() => setType('asc')}>Сортировка по возрастанию</Button>
+      <Button handleDo={() => setType('desc')}>Сортировка по убывание</Button>
+      <Button handleDo={() => setType('letter')}>Сортировка по алфавиту</Button>
+
+      <AddEditTask handleOnChange={handleOnChange} isShow={isShow} dataForm={dataForm} handleShow={handleShow} submitEditData={submitEditData} submitData={submitData}/>
+      
       <Input propsClass={'inputSearch'} value={search} handleOnChange={(e) => setSearch(e.target.value)}/>
-      <TodoList todoList={searchArray().slice(offset, offset + 2)} editTodo={editTodo} deleteTodo={deleteTodo} completedOnChange={completedOnChange} value={search}/>
-      <Pagination limit={2} offset={offset} length={todoList.length} setOffset={setOffset}/>
-    </>
+      {/* ВЫВОД ДАННЫХ */}
+      <TodoList type={type}  todoList={todoList} offset={offset} editTodo={editTodo} deleteTodo={deleteTodo} completedOnChange={completedOnChange}/>
+      {/* ПАГИНАЦИЯ */}
+      <Pagination limit={2} offset={offset} length={todoList?.length} setOffset={setOffset}/>
+    </div>
   )
 }
 

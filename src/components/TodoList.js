@@ -1,14 +1,27 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import TodoCard from "./TodoCard"
-import TodoNot from './TodoNot'
-import classes from './components.module.css'
 
-const TodoList = ({ todoList, editTodo, deleteTodo, completedOnChange, value }) => {
+import classes from './components.module.css'
+import { Context } from '../App'
+import { useSearch, useSort,useDebounce } from './hooks'
+
+const TodoList = ({ type,todoList, offset, editTodo, deleteTodo, completedOnChange }) => {
+  const { search } = useContext(Context);
+
+  const result = useSearch(todoList, search, 'title')
+  const debouncedValue = useDebounce(search,1000)
+
+  const sortedArray = useSort(result, type, 'date', 'title')
+
+  if ( sortedArray?.length === 0 && search ) {
+    return (
+      <p>По данному <strong>{debouncedValue}</strong> запросу ничего не найдено</p>
+    )
+  }
+
   return (
     <div className={classes.flexList}>
-      {
-       (todoList.length === 0 && value.length>0) ? <TodoNot value={value}/> :
-        todoList.map((todo, i) => 
+      {sortedArray?.slice(offset, offset + 2).map((todo, i) => 
         <TodoCard key={todo.date} todo={todo} editTodo={editTodo} deleteTodo={deleteTodo} completedOnChange={completedOnChange}/>
       )}
     </div>
